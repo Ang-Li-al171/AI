@@ -1,5 +1,8 @@
 package q2;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
@@ -7,7 +10,7 @@ import q2.State;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException{
         
         Scanner in = new Scanner(System.in);
         
@@ -22,7 +25,7 @@ public class Main {
         while(!q.isEmpty()){
             State current = q.poll();
             if(current.lastFilledJ == n-1){
-                printBoard(current.ipos);
+                printBoardAndWriteToFile(current.ipos);
                 System.out.println(current.costSoFar+current.h);
                 break; //solution found
             } else {
@@ -36,18 +39,22 @@ public class Main {
         in.close();
     }
     
-    private static void printBoard(int[] ipos){
+    private static void printBoardAndWriteToFile(int[] ipos) throws FileNotFoundException, UnsupportedEncodingException{
+    	PrintWriter writer = new PrintWriter("queens-al171.csv", "UTF-8");
         StringBuilder sb = new StringBuilder();
         for(int i=0;i<ipos.length;i++){
             for(int j=0;j<ipos.length;j++){
                 if(ipos[j]==i){
-                    sb.append("1 ");
+                    sb.append("Q,");
                 } else {
-                    sb.append("0 ");
+                    sb.append("_,");
                 }
             }
+            sb.deleteCharAt(sb.length()-1);
             sb.append('\n');
         }
         System.out.println(sb.toString());
+        writer.write(sb.toString());
+    	writer.close();
     }
 }
